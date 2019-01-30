@@ -11,8 +11,8 @@
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
           <input type="password" class="form-control" id="exampleInputPassword1" name="exampleInputPassword1" placeholder="contraseña" [(ngModel)]="login.password">
-          <div class="alert alert-danger my-2" role="alert" [hidden]="!genericError">
-            <span>{{genericError}}</span>
+          <div class="alert my-2" role="alert" [hidden]="!genericMessage" [ngClass]="(genericMessage == 'Login correcto.' ? 'alert-success' : 'alert-danger')">
+            <span>{{genericMessage}}</span>
           </div>
           <button type="button" class="btn btn-link" (click)="openModal(signinModal)">Si no tienes cuenta, regístrate</button>
         </div>
@@ -51,7 +51,10 @@
         <label for="txtLastName">Repite la contraseña</label>
         <input type="password" class="form-control" id="txtRepeatPassword" name="txtRepeatPassword" [(ngModel)]="signin.repeatPassword" placeholder="contraseña">
       </div>
-      <button type="submit" class="btn btn-success" (click)="doSignin()">Registrarme</button>
+      <div class="alert my-2" role="alert" [hidden]="!genericSigninMessage" [ngClass]="(genericSigninMessage == 'Se ha registrado exitosamente.' ? 'alert-success' : 'alert-danger')">
+        <span>{{genericSigninMessage}}</span>
+      </div>
+      <button type="submit" class="btn btn-success" (click)="doSignin()" id="signin-btn">Registrarme</button>
     </form>
   </div>
 </ng-template>

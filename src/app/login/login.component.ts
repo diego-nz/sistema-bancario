@@ -1,6 +1,8 @@
 import { Component, TemplateRef, OnInit } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { LoginService } from '../services/login.service';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +12,8 @@ import { LoginService } from '../services/login.service';
 export class LoginComponent implements OnInit {
   private login: any;
   private signin: any;
-  private genericError: string;
+  private genericMessage: string;
+  private genericSigninMessage: string;
   private loadingService: boolean;
   modalRef: BsModalRef;
   config = {
@@ -19,14 +22,21 @@ export class LoginComponent implements OnInit {
     backdrop: true,
     ignoreBackdropClick: true
   };
-  constructor(private modalService: BsModalService, private loginService: LoginService) {
+  constructor(private modalService: BsModalService, 
+    private loginService: LoginService, 
+    private router: Router) {
+
     this.login = {email:'', password: ''};
     this.signin = {firstname: '', lastname: '', email: '', password: '', repeatPassword: ''};
-    this.genericError = undefined;
+    this.genericMessage = undefined;
+    this.genericSigninMessage = undefined;
     this.loadingService = false;
   }
 
   ngOnInit(){
+    if(this.loginService.isUserLoggedIn()){
+        this.router.navigate(['/home']);
+    }
   }
  
   openModal(template: TemplateRef<any>) {
@@ -36,14 +46,14 @@ export class LoginComponent implements OnInit {
   doLogin(){
     const flag = this.validateLogin();
     if(flag){
-      this.genericError = undefined;
+      this.genericMessage = undefined;
       if(this.validateEmail(this.login.email)){
-        this.callLoginService();
+        this.callLoginService(this.login.email, this.login.password);
       } else {
-        this.genericError = 'Correo inválido.';  
+        this.genericMessage = 'Correo inválido.';  
       }
     } else {
-      this.genericError = 'Debes ingresar el usuario y la contraseña.';
+      this.genericMessage = 'Debes ingresar el usuario y la contraseña.';
     }
   }
 
@@ -60,44 +70,50 @@ export class LoginComponent implements OnInit {
     return regexEmail.test(email);
   }
 
-  callLoginService(){
+  callLoginService(email: string, password: string){
+    const body = {email: email, password : password}
     document.querySelector('#login-btn').textContent = 'Cargando...';
     this.loadingService = true;
-    this.loginService.userLogin(this.login).subscribe(
+    this.loginService.userLogin(body).subscribe(
     (data: any)=>{
       console.log(data.token);
-      this.genericError = undefined;
+      this.genericMessage = undefined;
       this.loadingService = false;
       document.querySelector('#login-btn').textContent = 'Entrar';
-    }, error => {
+      this.genericMessage = 'Login correcto.';
+      this.loginService.jsonWebTokenDecode(data.token);
+      setTimeout(() => {
+        this.router.navigate(['/home']);
+      }, 900);
+    }, (error: any) => {
       console.log(error);
-      this.genericError = 'Los datos ingresados son inválidos.';
+      if(error.status == 404){
+        this.genericMessage = 'Los datos ingresados son inválidos.';
+      } else {
+        this.genericMessage = 'Hubo un problema, favor de intentarlo más tarde.';
+      }    
       this.loadingService = false;
       document.querySelector('#login-btn').textContent = 'Entrar';
     });
   }
 
   doSignin(){
-    console.log(this.signin);
     if(this.validateRegisterForm()){
         if(this.validateEmail(this.signin.email)){
           if(this.validatePasswords()){
-              console.log('Registrar con servicio');
               this.callSigninService();
           } else {
-            console.log('Las contraseñas no son coinciden');
+            this.genericSigninMessage = 'Las contraseñas no son coinciden.';
           }
         } else {
-          console.log('Email inválido');
+          this.genericSigninMessage = 'Correo inválido.';
         }
     } else {
-      console.log('Campos vacíos');
+      this.genericSigninMessage = 'Completa todos los campos.';
     }
   }
 
   validateRegisterForm(){
-    console.log(this.signin);
-    console.log(this.modalRef);
     if(this.signin.firstname.trim() != '' && this.signin.lastname.trim() != '' && this.signin.email.trim() != '' 
         && this.signin.password.trim() != '' && this.signin.repeatPassword.trim() != ''){
         return true;
@@ -116,6 +132,7 @@ export class LoginComponent implements OnInit {
   }
 
   callSigninService(){
+    document.querySelector('#signin-btn').textContent = 'Registrando...';
     const body = {
       firstname: this.signin.firstname, 
       lastname: this.signin.lastname, 
@@ -125,8 +142,30 @@ export class LoginComponent implements OnInit {
     this.loginService.userSignin(body).subscribe(
     (data: any)=>{
       console.log(data.success);
-    }, error => {
-      console.log(error);
+      this.genericSigninMessage = undefined;
+      document.querySelector('#signin-btn').textContent = 'Registrarme';
+      this.genericSigninMessage = 'Se ha registrado exitosamente.';
+      this.callLoginService(body.email, body.password);
+      setTimeout(() => {
+        this.resetModal();
+      }, 800);
+    }, (error: any) => {
+      console.log(error.status);
+      if(error.status == 403){
+        this.genericSigninMessage = 'El correo ya ha sido registrado.';
+      } else {
+        this.genericSigninMessage = 'Hubo un problema, favor de intentarlo más tarde.';
+      }
+      document.querySelector('#signin-btn').textContent = 'Registrarme';
     });
+  }
+
+  resetModal(){
+      this.modalRef.hide();
+      this.signin = {firstname: '', lastname: '', email: '', password: '', repeatPassword: ''};
+  }
+
+  sendLoginAfterSignin(){
+    this.callLoginService(this.signin.email, this.signin.password);
   }
 }
