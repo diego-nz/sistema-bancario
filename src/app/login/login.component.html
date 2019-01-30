@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pt-5">
+    <div class="jumbotron">
+      <h1 class="display-4">Iniciar sesión</h1>
+      
+      <form>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Usuario</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" name="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Correo" [(ngModel)]="login.user">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input type="password" class="form-control" id="exampleInputPassword1" name="exampleInputPassword1" placeholder="contraseña" [(ngModel)]="login.password">
+          <div class="alert alert-danger my-2" role="alert" [hidden]="!genericError">
+            <span>{{genericError}}</span>
+          </div>
+          <button type="button" class="btn btn-link" (click)="openModal(signin)">Si no tienes cuenta, regístrate</button>
+        </div>
+        <button type="submit" class="btn btn-primary" (click)="doLogin()">Entrar</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template #signin>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Ingresa los datos</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="txtName">Nombre</label>
+        <input type="text" class="form-control" id="txtName" name="txtName" placeholder="nombre">
+      </div>
+      <div class="form-group">
+        <label for="txtLastName">Apellido Paterno</label>
+        <input type="text" class="form-control" id="txtLastName" name="txtLastName" placeholder="apellido">
+      </div>
+      <div class="form-group">
+        <label for="txtLastName">Email</label>
+        <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="correo">
+      </div>
+      <div class="form-group">
+        <label for="txtLastName">Contraseña</label>
+        <input type="text" class="form-control" id="txtPassword" name="txtPassword" placeholder="contraseña">
+      </div>
+      <div class="form-group">
+        <label for="txtLastName">Repite la contraseña</label>
+        <input type="text" class="form-control" id="txtRepeatPassword" name="txtPassword" placeholder="contraseña">
+      </div>
+      <button type="button" class="btn btn-success">Registrarme</button>
+    </form>
+  </div>
+</ng-template>
+
