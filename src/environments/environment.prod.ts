@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'https://mighty-refuge-81707.herokuapp.com/api/auth/user/'
 };
