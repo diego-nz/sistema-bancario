@@ -11,9 +11,14 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  serviceUserLogin(body: any){
+  userLogin(body: any){
     const headers = {headers: new HttpHeaders({'Content-Type':  'application/json'})};
-    console.log(this.API_URL+'authenticate');
     return this.http.post(this.API_URL+'authenticate',body,headers);
+  }
+
+  userSignin(body: any){
+    const headers = {headers: new HttpHeaders({'Content-Type':  'application/json'})};
+    console.log(body);
+    return this.http.post(this.API_URL+'create',body,headers);
   }
 }
