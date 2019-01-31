@@ -27,7 +27,7 @@ export class LoginService {
   jsonWebTokenDecode(token: string){
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(token);
-    this.cookie.set('decodedToken', decodedToken);
+    this.cookie.set('decodedToken', JSON.stringify(decodedToken));
     this.cookie.set('encodedToken',token);
     console.log('Token',token);
     console.log('TokenDecoded',decodedToken);

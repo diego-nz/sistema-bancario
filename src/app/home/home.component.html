@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Sistema bancario</a>
+    <a class="navbar-brand" href="#">Sistema bancario - Bienvenido {{userName.firstname}} {{userName.lastname}}</a>
     <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="navbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -20,6 +20,33 @@
       </span>
     </div>
   </nav>
-<p>
-  home works!
-</p>
+  <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <h1 class="display-4">¡Obtén una nueva tarjeta hoy mismo!</h1>
+              <p class="lead">Encuentra la tarjeta ideal para ti, y solicítala desde aquí en el catálogo que ponemos a tu dispocisión.</p>
+          </div>
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <p class="lead">Espacio para imagen.</p>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="input-group mb-3">
+                    <select class="custom-select" id="inputGroupSelect02">
+                      <option selected>Choose...</option>
+                      <option value="1">One</option>
+                      <option value="2">Two</option>
+                      <option value="3">Three</option>
+                    </select>
+                    <div class="input-group-append">
+                      <label class="input-group-text" for="inputGroupSelect02">Tipo de tarjeta</label>
+                    </div>
+                  </div>
+            </div>
+          </div>
+
+      </div>
+    </div>

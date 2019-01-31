@@ -12,6 +12,7 @@ import { LoginService } from './services/login.service';
 import { HomeComponent } from './home/home.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { AuthGuard } from './guards/auth-guard.service';
+import { HomeService } from './services/home.service';
 
 
 @NgModule({
@@ -28,7 +29,7 @@ import { AuthGuard } from './guards/auth-guard.service';
     FormsModule,
     HttpClientModule
   ],
-  providers: [LoginService, CookieService, AuthGuard],
+  providers: [LoginService, CookieService, AuthGuard, HomeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
