@@ -15,13 +15,13 @@ export class LoginService {
 
   userLogin(body: any){
     const headers = {headers: new HttpHeaders({'Content-Type':  'application/json'})};
-    return this.http.post(this.API_URL+'authenticate',body,headers);
+    return this.http.post(this.API_URL+'/auth/user/authenticate',body,headers);
   }
 
   userSignin(body: any){
     const headers = {headers: new HttpHeaders({'Content-Type':  'application/json'})};
     console.log(body);
-    return this.http.post(this.API_URL+'create',body,headers);
+    return this.http.post(this.API_URL+'/auth/user/create',body,headers);
   }
 
   jsonWebTokenDecode(token: string){

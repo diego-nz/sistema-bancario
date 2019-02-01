@@ -78,11 +78,11 @@ export class LoginComponent implements OnInit {
     (data: any)=>{
       console.log(data.token);
       this.genericMessage = undefined;
-      this.loadingService = false;
       document.querySelector('#login-btn').textContent = 'Entrar';
       this.genericMessage = 'Login correcto.';
       this.loginService.jsonWebTokenDecode(data.token);
       setTimeout(() => {
+        this.loadingService = false;
         this.router.navigate(['/home']);
       }, 900);
     }, (error: any) => {
@@ -132,6 +132,7 @@ export class LoginComponent implements OnInit {
   }
 
   callSigninService(){
+    this.loadingService = true;
     document.querySelector('#signin-btn').textContent = 'Registrando...';
     const body = {
       firstname: this.signin.firstname, 
@@ -147,6 +148,7 @@ export class LoginComponent implements OnInit {
       this.genericSigninMessage = 'Se ha registrado exitosamente.';
       this.callLoginService(body.email, body.password);
       setTimeout(() => {
+        this.loadingService = false;
         this.resetModal();
       }, 800);
     }, (error: any) => {
@@ -156,6 +158,7 @@ export class LoginComponent implements OnInit {
       } else {
         this.genericSigninMessage = 'Hubo un problema, favor de intentarlo más tarde.';
       }
+      this.loadingService = false;
       document.querySelector('#signin-btn').textContent = 'Registrarme';
     });
   }

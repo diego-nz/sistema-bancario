@@ -13,9 +13,21 @@ export class HomeService {
   constructor(private http: HttpClient, private cookie: CookieService) { }
 
   getCatalogs(){
-    // const headers = new HttpHeaders({'Content-Type':  'application/json'});
     const params = new HttpParams();
     params.set('X-access-token', this.cookie.get('encodedToken'));
-    return this.http.get(this.API_URL+'catalogs/cards',{params: params});
+    return this.http.get(this.API_URL+'/catalogs/cards',{params: params});
+  }
+
+  requestCard(type: string, name: string){
+    const id = JSON.parse(this.cookie.get('decodedToken'));
+    const body = {userId: id.id, type: type, name: name};
+    const headers = {headers: new HttpHeaders({'Content-Type':  'application/json', 'X-access-token': this.cookie.get('encodedToken')})};
+    return this.http.post(this.API_URL+'/accounts', body , headers);
+  }
+
+  getAccounts(){
+    const params = new HttpParams();
+    params.set('X-access-token', this.cookie.get('encodedToken'));
+    return this.http.get(this.API_URL+'/accounts',{params: params});
   }
 }
