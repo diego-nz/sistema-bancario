@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
     this.genericMessage = null;
     this.arrayAccounts = [];
     this.getCatalogsCallService();
+    this.callGetAccountsService();
   }
 
   ngOnInit() {
@@ -80,7 +81,7 @@ export class HomeComponent implements OnInit {
       (data: any) => {
         this.arrayAccounts = data.response;
         this.accountsMessage = undefined;
-      },(error) => {
+      }, (error) => {
         this.accountsMessage = 'Ocurrió un error al procesar tus cuentas.';
       }
     );
